@@ -14,6 +14,7 @@ function writePassword() {
 generateBtn.addEventListener("click", writePassword);
 
 let sPassSource = "";
+let nFinalPass=0;
 let rgUserChoice = [];
 
 const objCharacterPool = {
@@ -41,26 +42,75 @@ function generatePassword() {
         return "The requested password was too short."
       break;
   }
+  rgUserChoice=[];
   for (property in objCharacterPool) {
     if(confirm("Shall we add "+ property +" characters to the pool of characters to draw from? Select OK to approve or Cancel to exclude "+ property +" characters.")) {
       rgUserChoice.push(property);
     }
   }
-  console.log (rgUserChoice);
+  if (rgUserChoice.length===0) {
+    alert("Unfortunately, you have selected no character types from which to generate the password. Please begin the process again by clicking the Generate Password button.");
+    return "Cannot generate password. The user has rejected all possible characters."
+    }
   
-  return nPassLength;
-
+  GeneratePool();  
+  
+  nFinalPass = RandomFromPool(sPassSource, nPassLength);
+  console.log("validation..."+ValidatePassword(nFinalPass));
+    return nFinalPass;
 }
 
-//function RandomFromPool(inputPool) {
-      // for number of elements in array, add the .element from object, hopefully elegantly.
+function GeneratePool() {
+    // generates the pool of possible characters based on the user's choices
+    sPassSource="";
+    for (i=0;i<rgUserChoice.length;i++) {sPassSource=sPassSource.concat(objCharacterPool[rgUserChoice[i]]);}  
+      //adding values from only those properties of the objCharacterPool object that correspond to
+      //user criteria, which are stored in the rgUserChoice array.
+                                                                    
+    return;
+}
 
-      // if not, you must select at least one type of character (# # # #) to generate the password
-      // from. PLease try again later, etc.
+/* function ValidatePassword(candidatePass) {
+    let isValid=false;
+    for (nVPChoiceIndex=0; nVPChoiceIndex<candidatePass.length; nVPChoiceIndex++) {
+      isValid=false;
+      for(nValPassIndex=0;nValPassIndex<rgUserChoice.length; nValPassIndex++){ 
+        if (candidatePass[nVPChoiceIndex]===objCharacterPool[rgUserChoice[nValPassIndex]]) {
+          //checking the candidate password against all the categories the user has chosen
+          isValid=true;
+        }
+      } if (isValid==false) {return rgUserChoice[nValPassIndex]} 
+      //if the password has failed to contain at least one character from the current category, exit function and return false.
+    }
+    return isValid;
+} 
+*/
+function ValidatePassword (candidatePass) {
+    let isValid=false;
+    console.log("rgUserChoice is "+rgUserChoice);
+    for (i=0; i<rgUserChoice.length; i++) {
+        if (candidatePass.indexOf(rgUserChoice[i])===-1) {
+          console.log("failed for lack of "+rgUserChoice[i]);
+          return false;
+        }
+         
+        }
+    }
 
-      // will add a validator for at least one of selected categories.
 
-// }
+
+
+function RandomFromPool(inputPool,strLength) {
+  console.log(inputPool+" at "+strLength);
+  let nTempRandomisedPass="";
+    for (randIndex=0;randIndex<strLength;randIndex++)
+    {
+      nTempRandomisedPass=nTempRandomisedPass.concat(inputPool[Math.floor(Math.random()*(inputPool.length))]);
+      //iterating over  the desired length of the password, nTempRandomisedPass is concatenated
+      //with a random member of the character pool that the user's choices have determined (inputPool)
+    }
+    return nTempRandomisedPass;
+}
 
 function IsANumber(suppliedString) { //This function validates input as a number.
   let sValidString=true;
@@ -69,20 +119,16 @@ function IsANumber(suppliedString) { //This function validates input as a number
   // getting rid of the usual suspects
   else
     {
-      console.log("indexNum: "+ strLIndex);
       while (strLIndex<suppliedString.length && sValidString) {
-          // We check every character in the supplied string for membership in the digit set,
-          // which is already conveniently present in objCharacterPool.numbers property.
-          
+          /* Checking every character in the supplied string for membership in the digit set,
+          which is already conveniently present in objCharacterPool.numbers property. */
           sValidString=false; 
-          
          for (numSetIndex=0; numSetIndex<objCharacterPool.number.length; numSetIndex++) {
             if (suppliedString[strLIndex] == objCharacterPool.number[numSetIndex]) {
               console.log("indexNum: "+ strLIndex+"numSetIndex: "+numSetIndex);
-              sValidString=true; //if there is at least one match, that character is validated
-                                 //as a digit, and the loop continues until all characters have been checked.
-                                 //Otherwise, if sValidString remains false, the while loop ends.
-              
+              sValidString=true; /*if there is at least one match, that character is validated
+                                  as a digit, and the loop continues until all characters have been checked.
+                                  Otherwise, if sValidString remains false, the while loop ends.*/
             } 
          }
          strLIndex++ //incrementing the supplied string traversal loop
