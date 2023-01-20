@@ -41,9 +41,9 @@ The code uses object properties to store character sets, and is written to allow
 
 ## Results:
 
-The application is currently live on [GitHub Pages](https://tadcos29.github.io/responsive-portfolio/) 
+The application is currently live on [GitHub Pages](https://tadcos29.github.io/password-generation-trifle/) 
 
-The GitHub repository for the project is: https://github.com/tadcos29/responsive-portfolio
+The GitHub repository for the project is: https://github.com/tadcos29/password-generation-trifle
 
 ## Potential Issues:
 
