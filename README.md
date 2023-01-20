@@ -30,7 +30,7 @@ The code generates a password based on valid user selections of character sets t
 
 ![image](./assets/img/pg-ord-excl-num-output.png)
 
-The code uses object properties to store character sets, and is written to allow expandability - adding new character sets to the storage object See, for example, the addition of a hearts property to the original four:
+The code uses object properties to store character sets, and is written to allow expandability - adding new character sets to the storage object will automatically include them in the sequence of user prompts. See, for example, the addition of a hearts property to the original four:
 
 ![image](./assets/img/pg-hearts-demo-1.png)
 
