@@ -5,9 +5,7 @@ var generateBtn = document.querySelector("#generate");
 function writePassword() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
-
   passwordText.value = password;
-
 }
 
 // Add event listener to generate button
@@ -20,7 +18,7 @@ let rgUserChoice = [];
 const objCharacterPool = {
   lowercase: "abcdefghijklmnopqrstuvwxyz",
   number: "1234567890",
-  special: "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\'"
+  special: "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\'",
 };
 objCharacterPool.uppercase= objCharacterPool.lowercase.toUpperCase();
 
@@ -30,7 +28,7 @@ function generatePassword() {
   let nPassLength = 0;
   nPassLength = prompt("How many characters should the password have? (8-128)");
   switch (true) {
-      case (!IsANumber(nPassLength)):    
+      case (!IsANumber(nPassLength)):
         {alert("'"+nPassLength+"' is not a valid number. Please begin the process again by clicking the Generate Password button.");}
         return "The user has failed to request a valid password length."
       case (nPassLength > 128):
@@ -53,10 +51,17 @@ function generatePassword() {
     return "Cannot generate password. The user has rejected all possible characters."
     }
   
-  GeneratePool();  
-  
+  GeneratePool();  // Generate pool of numbers.
+
   nFinalPass = RandomFromPool(sPassSource, nPassLength);
+ while (!ValidatePassword(nFinalPass)){
+  nFinalPass="";
+  nFinalPass=RandomFromPool(sPassSource,nPassLength);
+ }
+    
+  
   console.log("validation..."+ValidatePassword(nFinalPass));
+
     return nFinalPass;
 }
 
@@ -69,36 +74,29 @@ function GeneratePool() {
                                                                     
     return;
 }
-
-/* function ValidatePassword(candidatePass) {
-    let isValid=false;
-    for (nVPChoiceIndex=0; nVPChoiceIndex<candidatePass.length; nVPChoiceIndex++) {
-      isValid=false;
-      for(nValPassIndex=0;nValPassIndex<rgUserChoice.length; nValPassIndex++){ 
-        if (candidatePass[nVPChoiceIndex]===objCharacterPool[rgUserChoice[nValPassIndex]]) {
-          //checking the candidate password against all the categories the user has chosen
-          isValid=true;
+    function ValidatePassword (candidatePass) {
+      let i=0;
+      let y=0;
+      let x=0;
+      let wherematch=0;
+      let foundFlag=false;
+      while (y<rgUserChoice.length) {
+        
+        console.log("Now traversing"+ rgUserChoice[y]);
+        
+        for (x=0;x<objCharacterPool[rgUserChoice[y]].length;x++) {
+          console.log("Now traversing the actual string: "+ objCharacterPool[rgUserChoice[y]]);
+            if (candidatePass.indexOf(objCharacterPool[rgUserChoice[y]][x])===-1) {
+              console.log("Not found "+objCharacterPool[rgUserChoice[y]][x]+" in "+candidatePass);
+            } else {foundFlag=true;}
+          }
+          if (!foundFlag) {console.log("Not found "+objCharacterPool[rgUserChoice[y]]+" in "+candidatePass);return false;} else {console.log(objCharacterPool[rgUserChoice[y]]+" cleared.")}
+          y++; 
+          foundFlag=false;
         }
-      } if (isValid==false) {return rgUserChoice[nValPassIndex]} 
-      //if the password has failed to contain at least one character from the current category, exit function and return false.
-    }
-    return isValid;
-} 
-*/
-function ValidatePassword (candidatePass) {
-    let isValid=false;
-    console.log("rgUserChoice is "+rgUserChoice);
-    for (i=0; i<rgUserChoice.length; i++) {
-        if (candidatePass.indexOf(rgUserChoice[i])===-1) {
-          console.log("failed for lack of "+rgUserChoice[i]);
-          return false;
-        }
-         
-        }
-    }
-
-
-
+        return true;
+      }
+  
 
 function RandomFromPool(inputPool,strLength) {
   console.log(inputPool+" at "+strLength);
@@ -112,7 +110,7 @@ function RandomFromPool(inputPool,strLength) {
     return nTempRandomisedPass;
 }
 
-function IsANumber(suppliedString) { //This function validates input as a number.
+ function IsANumber(suppliedString) { //This function validates input as a number.
   let sValidString=true;
   let strLIndex=0; 
   if (suppliedString==undefined || suppliedString==="") {sValidString=false; }
@@ -135,4 +133,4 @@ function IsANumber(suppliedString) { //This function validates input as a number
       }
     }
     return sValidString;
-}
+} 
